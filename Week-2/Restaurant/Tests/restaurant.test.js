@@ -29,9 +29,11 @@ describe ('restaurant ordering app tests', () => {
 
     test('add an item to a menu',() => {
         const menu1 = new Menu('starters', ':)')
-        const item1 = new Item('Soup', '£3.00')
-        menu1.addItem('Soup')
-        expect(menu1.items).toEqual(['Soup'])
+        const Soup = new Item('Soup', '£3.00')
+        const Wings = new Item('Wings', '£2.50')
+        menu1.addItem(Soup)
+        menu1.addItem(Wings)
+        expect(menu1.items).toEqual([Soup, Wings])
 
     })
 })

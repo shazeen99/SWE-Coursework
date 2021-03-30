@@ -1,6 +1,6 @@
 class Menu {
     constructor (title, icon) {
-        this. title = title
+        this.title = title
         this.icon = icon
         this.items = []
     }

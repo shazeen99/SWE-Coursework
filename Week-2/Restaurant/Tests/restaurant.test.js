@@ -22,9 +22,11 @@ describe ('restaurant ordering app tests', () => {
 
     test('add several menus to a restaurant', () => {
         const KFC = new Restaurant ('KFC', 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png', 'London');
-        KFC.addmenu('menu1')
-        KFC.addmenu('menu2')
-        expect(KFC.menus).toEqual(['menu1', 'menu2'])
+        const menu1 = new Menu('starters', ':)')
+        const menu2 = new Menu('starters', ':)')
+        KFC.addmenu(menu1)
+        KFC.addmenu(menu2)
+        expect(KFC.menus).toEqual([menu1, menu2])
     })
 
     test('add an item to a menu',() => {

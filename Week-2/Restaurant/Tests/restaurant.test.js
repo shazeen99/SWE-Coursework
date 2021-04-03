@@ -1,41 +1,29 @@
-const Restaurant = require('../restaurant')
-const Menu = require('../menu')
-const Item = require('../item')
 const { TestScheduler } = require('@jest/core')
+const Restaurant = require('../src/restaurant')
+const db = require('../src/initialiseDBexport')
 
-describe ('restaurant ordering app tests', () => {
-    test('add a restaurant', () => {
-        const KFC = new Restaurant ('KFC', 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png', 'London');
-        expect(KFC.city).toEqual('London')  
+describe('Restaurants', () => {
+    beforeAll((done) => {
+        db.run(`CREATE TABLE IF NOT EXISTS Restaurants (
+            Res_id INTEGER PRIMARY KEY NOT NULL,
+            Name varchar(50) NOT NULL, 
+            ImageURL varchar(300), 
+            City varchar(50)
+          );`, done)
     })
 
-    test('add a menu', () => {
-        const menu1 = new Menu ('menu1', ':)')
-        expect(menu1.icon).toEqual(':)')
+    test('Restaurant data saved to DB', (done) => {
+        const restaurant1 = new Restaurant('KFC', 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png', 'London')
+        restaurant1.save(() => {
+            db.get('SELECT * FROM Restaurants WHERE Name=?', 'KFC', (err,row) => {
+                console.log(err)
+                expect(row.ImageURL).toEqual('https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png');
+                expect(row.Res_id).toEqual(1);
+                done();
+            })
+        })
     })
 
-    test('add an item', () => {
-        const soup = new Item ('Soup', '£3.00')
-        expect(soup.price).toEqual('£3.00')
-        expect(soup.name).toEqual('Soup')
-    })
-
-    test('add several menus to a restaurant', () => {
-        const KFC = new Restaurant ('KFC', 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png', 'London');
-        const menu1 = new Menu('starters', ':)')
-        const menu2 = new Menu('starters', ':)')
-        KFC.addmenu(menu1)
-        KFC.addmenu(menu2)
-        expect(KFC.menus).toEqual([menu1, menu2])
-    })
-
-    test('add an item to a menu',() => {
-        const menu1 = new Menu('starters', ':)')
-        const Soup = new Item('Soup', '£3.00')
-        const Wings = new Item('Wings', '£2.50')
-        menu1.addItem(Soup)
-        menu1.addItem(Wings)
-        expect(menu1.items).toEqual([Soup, Wings])
-
-    })
+    test('Restaurant has menus', (done) => )
 })
+

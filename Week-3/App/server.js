@@ -7,7 +7,7 @@ const {Menu} = require('./src/menu');
 const {Item} = require('./src/item');
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 // setup our templating engine
 const handlebars = expressHandlebars({
@@ -37,16 +37,43 @@ app.get('/', async (req, res) => {
     res.render('home', {restaurants})
 })
 
-app.get('/restaurants/:id', async (req, res) => {
-    const restaurant = await Restaurant.findByPk(req.params.id)
-    const menus = await restaurant.getMenus({
-        include: [{model: MenuItem, as: 'items'}],
-        nest: true
-    })
-    res.render('restaurant', {restaurant, menus})
-    console.log("get restaurant with ID:", req.params.id)
-   //res.send()
+// app.get('/restaurants/:id', async (req, res) => {
+//     const restaurant = await Restaurant.findByPk(req.params.id)
+//     const menus = await restaurant.getMenus({
+//         include: [{model: MenuItem, as: 'items'}],
+//         nest: true
+//     })
+//     res.render('restaurant', {restaurant, menus})
+//     console.log("get restaurant with ID:", req.params.id)
+//    //res.send()
+// })
+
+app.get('/new', async (req, res) => {
+    res.render('new')
 })
+
+// retrive data from restaurant about the items on the menu - to display on hmtl
+app.get("/restaurants/:id", async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    console.log(req.params.id)
+    const menus = await restaurant.getMenus({
+      include: [{ model: Item, as: "items" }],
+      nest: true,
+    });
+    res.render("restaurants", { restaurant, menus })
+    //console.log(restaurants)
+  });
+
+// app.use(express.urlencoded({ extended: true }))
+// app.use(express.json())
+
+// app.post('/restaurants', async (req, res) => {
+//     console.log(req.body); // this is the JSON body
+
+//     // TODO - add code to insert data into the database!
+
+//     res.redirect('/')
+// })
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)

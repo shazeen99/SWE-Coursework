@@ -1,4 +1,8 @@
+<title>Restaurants</title>
 <h1>Restaurants</h1>
+<html lang="en">
+    <a href="/new">Add</a>
+<script src="/main.js"></script>
 <section>
     {{#each restaurants}}
         <a href="/restaurants/{{this.id}}">
@@ -6,7 +10,27 @@
                 <header style="background-image: url({{this.image}});">
                 <main>{{this.name}}</main>
                 <footer>{{this.menus.length}} menus</footer>
+                <div>Number of page loads:
+                    <span id="Counter"></span>
+                    <script>
+                        var n = localStorage.getItem('on_load_counter');
+                        if (n === null) {
+                            n = 0;
+                        }
+                        n++;
+                        localStorage.setItem("on_load_counter", n);
+                        document.querySelector('#counter').innerText = `Visits to this page: ${localStorage.getItem('on_load_counter')}`
+                        </script>
+                </div>
             </article>
         </a>
     {{/each}}
 </section>
+</html>
+{{#each users}}
+    <article>
+      <header style="background-image url({{this.avatar}});">
+      <footer>{{this.name}}</footer>
+      </header>
+    </article>
+  {{/each}}
